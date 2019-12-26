@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+import "Datetime.proto";
+
+message KVS {
+  optional string   key = 1;
+  optional string   val = 2;
+  optional Datetime at  = 3;
+}

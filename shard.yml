@@ -1,0 +1,58 @@
+name: crawler
+version: 0.1.0
+
+authors:
+  - maiha <maiha@wota.jp>
+
+targets:
+  crawler:
+    main: src/cli/bin/crawler.cr
+  crawler-dev:
+    main: src/cli/bin/crawler.cr
+
+dependencies:
+  curl:
+    github: maiha/curl.cr
+    # version: ">= 0.4.3"
+    branch: referer
+  must:
+    github: maiha/must.cr
+  try:
+    github: maiha/try.cr
+  pretty:
+    github: maiha/pretty.cr
+    version: ">= 0.7.6"
+  pon:
+    github: maiha/pon.cr
+    version: ">= 0.5.0"
+  shell:
+    github: maiha/shell.cr
+    version: ">= 0.4.0"
+  cmds:
+    github: maiha/cmds.cr
+    version: ">= 0.3.4"
+  protobuf:
+    github: maiha/protobuf.cr
+    branch: json
+  protobuf-storage:
+    github: maiha/protobuf-storage.cr
+    # version: ">= 0.3.3"
+    branch: free-from-array-schema
+  clickhouse:
+    github: maiha/clickhouse.cr
+    version: ">= 0.5.4"
+  shard:
+    github: maiha/shard.cr
+  opts:
+    github: maiha/opts.cr
+    version: ">= 0.6.0"
+  composite_logger:
+    github: maiha/composite_logger.cr
+    version: ">= 0.4.0"
+  toml-config:
+    github: maiha/toml-config.cr
+    version: ">= 0.5.0"
+  myhtml:
+    github: kostya/myhtml
+
+license: MIT
