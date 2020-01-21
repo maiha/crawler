@@ -40,7 +40,8 @@ Cmds.command "recv" do
       process(recv)
 
       self.previous_url = current_url?
-      self.current_url  = compute_next_url(recv)
+      # set url to instance directly for the case of nil
+      @current_url = compute_next_url(recv)
     end
 
     html_house.meta[META_DONE] = Pretty::Time.now.to_s
