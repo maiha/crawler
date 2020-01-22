@@ -1,36 +1,34 @@
-SHELL = /bin/zsh
-.SHELLFLAGS = -o pipefail -c
-
 export LC_ALL=C
 export UID = $(shell id -u)
 export GID = $(shell id -g)
 
 WARNINGS := none
 
-DYNAMIC_BUILD := crystal build src/cli/bin/crawler.cr
-STATIC_BUILD  := docker-compose run --rm static shards build --link-flags "c /v/libcurl.a"
+DYNAMIC_BUILD := docker-compose run --rm static shards build
+STATIC_BUILD  := docker-compose run --rm static shards build --link-flags "-static /v/libcurl.a"
 
-# TODO: static build (currently fails)
-.PHONY : crawler
-crawler:
-	shards build crawler
+.PHONY : compile
+compile:
+	crystal build -o bin/crawler src/cli/bin/crawler.cr --warnings $(WARNINGS)
 
 .PHONY : dynamic
 dynamic:
-	$(DYNAMIC_BUILD) -o $@ --warnings $(WARNINGS)
+	$(DYNAMIC_BUILD) crawler
 
-# static build
-# Invalid memory access (signal 11) at address 0x63
-# [0x7f998f2d08bd] _nss_files_gethostbyname4_r +173
+.PHONY : static
+static:
+	$(STATIC_BUILD) crawler
+
 .PHONY : release
 release:
 	$(STATIC_BUILD) crawler --release
 
-download:
-	wget https://filmarks.com/list/vod/netflix
+.PHONY : console
+console:
+	docker-compose run static bash
 
-.PHONY : test
-test: spec
+.PHONY : ci
+ci: spec dynamic
 
 .PHONY : spec
 spec:

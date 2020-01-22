@@ -6,4 +6,4 @@ language: crystal
 #   - crystal tool format --check
 sudo: false
 script:
-  - make test
+  - make ci

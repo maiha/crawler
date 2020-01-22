@@ -7,5 +7,5 @@ services:
     user: "${UID}:${GID}"
     volumes:
       - .:/v
-      - ./libcurl.a:/usr/lib/libcurl.a
+      - ./libcurl.a:/v/libcurl.a
     working_dir: /v

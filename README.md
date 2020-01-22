@@ -1,15 +1,27 @@
-# crawler
+# crawler [![Build Status](https://travis-ci.org/maiha/crawler.svg?branch=master)](https://travis-ci.org/maiha/crawler)
 
-web crawler
+Highly customizable web crawler
+- **fast** : Native code with libcurl
+- **simple** : Just edit config
+- **flexible** : Extract data by CSS and Regex
+- **safe** : Detect infinite loop
+- **tracable** : All HTTP transfered data are stored
 
 ## Installation
 
-- [crystal](http://crystal-lang.org/) 0.31.1
-```console
-$ make
-```
+##### Static Binary is ready for x86_64 linux
+
+- https://github.com/maiha/crawler/releases
 
 ## Usage
+
+1. edit config
+2. receive html
+3. extract data
+
+##### 1. edit config
+
+For the first time, `config generate` may help you.
 
 ```console
 $ crawler config generate
@@ -27,8 +39,20 @@ html     = "css:div.rc"
 page_max = 2
 ```
 
+This means
+- Visits initial url `config:crawl.url`
+- Extracts html part `config:crawl.html` and stores in local
+- Follows next url `config:crawl.next` if page limit doesn't exceed `config:crawl.page_max`
+
+##### 2. receive html
+
 ```console
-$ crawler recv run
+$ crawler recv html
+```
+
+##### 3. extract data
+
+```console
 $ crawler extract json
 $ crawler pb list json -f val
 {"title":"Crystal"}
@@ -37,7 +61,20 @@ $ crawler pb list json -f val
 
 ## Development
 
-TODO: Write development instructions here
+- [crystal](http://crystal-lang.org/) 0.31.1
+
+##### for dynamic binary
+```console
+$ make dynamic
+```
+
+##### for static binary
+
+needs `libcurl.a`.
+
+```console
+$ make static
+```
 
 ## Contributing
 
