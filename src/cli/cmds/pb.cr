@@ -78,19 +78,19 @@ Cmds.command "pb" do
   end
 
   class Cond::Eq < Cond
-    def =~(pb : Protobuf::Message)
+    def =~(pb : Protobuf::Message) : Bool
       pb[@key].to_s == @val.to_s
     end
   end
   
   class Cond::Not < Cond
-    def =~(pb : Protobuf::Message)
+    def =~(pb : Protobuf::Message) : Bool
       pb[@key].to_s != @val.to_s
     end
   end
   
   private record Filter, conds : Array(Cond) = Array(Cond).new do
-    def =~ (pb)
+    def =~ (pb) : Bool
       ! (self !~ pb)
     end
 
@@ -160,7 +160,7 @@ Cmds.command "pb" do
     files = files.map{|file|
       begin
         File.real_path(file)
-      rescue Errno
+      rescue IO::Error
         raise Cmds::ArgumentError.new("No such file or directory '%s'" % file)
       end
     }.uniq.sort

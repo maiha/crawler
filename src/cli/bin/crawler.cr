@@ -42,7 +42,7 @@ class Cli::Main
     config.dryrun   = dryrun
     config.colorize = !nocolor
     config.force    = force
-    config.limit    = limit.not_nil!.to_i64 if limit
+    config.limit    = limit.try(&.to_i32)
     config.fields   = fields
     config.format   = format
     config.init!

@@ -9,7 +9,7 @@ class Crawl::Config < TOML::Config
   bool "verbose"
   bool "dryrun"
   bool "colorize"
-  int  "limit"
+  i32  "limit"
   str  "fields"
   str  "format"
   bool "force"
@@ -18,14 +18,14 @@ class Crawl::Config < TOML::Config
   str   "crawl/url"
   bool  "crawl/logging"
 
-  int   "crawl/page_max"
+  i32   "crawl/page_max"
   str   "crawl/wait"
-  int   "crawl/retry_max"
+  i32   "crawl/retry_max"
   str   "crawl/retry_wait"
   
-  float "crawl/dns_timeout"
-  float "crawl/connect_timeout"
-  float "crawl/read_timeout"
+  f64   "crawl/dns_timeout"
+  f64   "crawl/connect_timeout"
+  f64   "crawl/read_timeout"
 
   str   "crawl/log_dir"
   str   "crawl/store_dir"

@@ -18,36 +18,32 @@ dependencies:
     github: maiha/must.cr
   try:
     github: maiha/try.cr
+    version: "0.4.0"
   pretty:
     github: maiha/pretty.cr
-    version: ">= 0.9.2"
+    version: "1.0.0"
   pon:
     github: maiha/pon.cr
-    version: ">= 0.5.0"
+    version: "0.9.1"
   shell:
     github: maiha/shell.cr
-    version: ">= 0.4.0"
   cmds:
     github: maiha/cmds.cr
-    version: ">= 0.3.4"
-  protobuf:
-    github: maiha/protobuf.cr
-    branch: json
-  protobuf-storage:
-    github: maiha/protobuf-storage.cr
-    # version: ">= 0.3.3"
-    branch: free-from-array-schema
-  clickhouse:
-    github: maiha/clickhouse.cr
-    version: ">= 0.5.4"
-  shard:
-    github: maiha/shard.cr
+    version: "0.3.4"
   opts:
     github: maiha/opts.cr
-    version: ">= 0.6.0"
+  protobuf:
+    github: maiha/protobuf.cr
+    version: "2.3.0"
+  protobuf-storage:
+    github: maiha/protobuf-storage.cr
+    version: "0.4.0"
+  clickhouse:
+    github: maiha/clickhouse.cr
+  shard:
+    github: maiha/shard.cr
   toml-config:
     github: maiha/toml-config.cr
-    version: ">= 0.5.0"
   myhtml:
     github: kostya/myhtml
 

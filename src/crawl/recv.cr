@@ -14,7 +14,7 @@ class Crawl::Recv
   var res : Response
 
   # internal
-  var try_myhtml : Try(Myhtml::Parser) = Try(Myhtml::Parser).try{ Myhtml::Parser.new(res.body) }
+  var try_myhtml : Failure(Myhtml::Parser) | Success(Myhtml::Parser) = Try(Myhtml::Parser).try{ Myhtml::Parser.new(res.body) }
 
   def initialize(@client, @url, @retry_max, @retry_wait, @logger)
     self.prefix_logging = "[recv] "
