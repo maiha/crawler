@@ -4,6 +4,10 @@ class Cli::Main
   include Opts
   include GlobalHelper
 
+  {% begin %}
+  TARGET_TRIPLE = "{{`crystal -v | grep x86_64 | cut -d: -f2`.strip}}"
+  {% end %}
+
   CONFIG_FILE = Crawl::Config::FILENAME
   
   USAGE = <<-EOF
@@ -132,6 +136,10 @@ class Cli::Main
       STDERR.puts red(Pretty.error(err).where.to_s) # This may kill app
       exit 255
     end
+  end
+
+  def show_version
+    "#{PROGRAM} #{VERSION} #{TARGET_TRIPLE} crystal-#{Crystal::VERSION} #{String.new(LibCurl.curl_version)}"
   end
 end
 

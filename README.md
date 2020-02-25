@@ -61,7 +61,7 @@ $ crawler pb list json -f val
 
 ## Development
 
-- [crystal](http://crystal-lang.org/) 0.31.1
+- [crystal](http://crystal-lang.org/) 0.33.0
 
 ##### for dynamic binary
 ```console

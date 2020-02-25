@@ -1,5 +1,5 @@
 Cmds.command "recv" do
-  var logger : Logger = config.build_logger
+  var logger : Logger = config.build_logger(path: nil)
 
   var visited_urls  = Set(String).new
 
@@ -60,7 +60,7 @@ Cmds.command "recv" do
   end
 
   protected def process(recv : Crawl::Recv)
-    at    = Datetime.new(Time.now)
+    at    = Datetime.new(Pretty::Time.now)
     array = recv.nodes(html_lookup)
 
     htmls = Array(KVS).new

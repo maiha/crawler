@@ -15,8 +15,8 @@ module Crawl::Strategy
       easy.timeout         = read_timeout.seconds
       easy.user_agent      = user_agent
       easy.referer         = referer?
-      
-      requested_at = Time.now
+
+      requested_at = Pretty::Time.now
       res = easy.get
 
       logger.debug "HTTP response (status %s)" % res.code

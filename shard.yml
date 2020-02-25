@@ -13,15 +13,14 @@ targets:
 dependencies:
   curl:
     github: maiha/curl.cr
-    # version: ">= 0.4.3"
-    branch: referer
+    version: ">= 0.4.5"
   must:
     github: maiha/must.cr
   try:
     github: maiha/try.cr
   pretty:
     github: maiha/pretty.cr
-    version: ">= 0.7.6"
+    version: ">= 0.9.2"
   pon:
     github: maiha/pon.cr
     version: ">= 0.5.0"
@@ -46,9 +45,6 @@ dependencies:
   opts:
     github: maiha/opts.cr
     version: ">= 0.6.0"
-  composite_logger:
-    github: maiha/composite_logger.cr
-    version: ">= 0.4.0"
   toml-config:
     github: maiha/toml-config.cr
     version: ">= 0.5.0"

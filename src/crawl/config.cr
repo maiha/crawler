@@ -70,8 +70,8 @@ class Crawl::Config < TOML::Config
   def init!
   end
 
-  def build_logger : Logger
-    build_logger(self.toml["logger"]?, nil)
+  def build_logger(path : String?) : Logger
+    build_logger(self.toml["logger"]?, path)
   end
 
   def build_logger(hash, _path : String?) : Logger
@@ -79,10 +79,13 @@ class Crawl::Config < TOML::Config
     when Nil
       return Logger.new(nil)
     when Array
-      CompositeLogger.new(hash.map{|i| build_logger(i, _path).as(Logger)})
+      Pretty::Logger.new(hash.map{|i| build_logger(i, _path).as(Logger)})
     when Hash
+      hint = hash["name"]?.try{|s| "[#{s}]"} || ""
       hash["path"] ||= _path || raise Error.new("logger.path is missing")
-      return CompositeLogger.build_logger(hash)
+      logger = Pretty::Logger.build_logger(hash)
+      logger.formatter = "{{mark}},[{{time=%H:%M}}] #{hint}{{message}}"
+      return logger
     else
       raise Error.new("logger type error (#{hash.class})")
     end

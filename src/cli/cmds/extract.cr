@@ -1,5 +1,5 @@
 Cmds.command "extract" do
-  var logger : Logger = config.build_logger
+  var logger : Logger = config.build_logger(path: nil)
 
   def run
     if name = task_name?
