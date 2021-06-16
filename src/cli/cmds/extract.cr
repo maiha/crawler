@@ -1,19 +1,34 @@
 Cmds.command "extract" do
+  usage "run   <name>             # extract data from html by config[extract.<name>]"
+  usage "test  <file> <pattern>   # extract data from <file> by <pattern>"
+  usage "clean <name>             # delete extracted files"
+
   var logger : Logger = config.build_logger(path: nil)
 
-  def run
-    if name = task_name?
-      process(name)
-    else
-      logger.info "possible: %s" % config.possible_extract_targets.join(", ")
-    end
+  task "run" do
+    name = arg1
+    process(name)
+  end
+
+  task "test" do
+    file = arg1
+    File.exists?(file) || abort "file not found: #{file.inspect}"
+
+    lookup = Crawl::Lookup.parse?(arg2) || abort "invalid pattern: [#{arg2.inspect}]"
+    do_test(path: Path[file], lookup: lookup)
+  end
+
+  task "clean" do
+    name  = arg1
+    house = kvs_house(name)
+    house.clean
   end
 
   protected def process(extract_name)
     lookups = build_lookups(extract_name, hint: "[extract.#{extract_name}]")
     house   = kvs_house(extract_name)
 
-    logger.debug "%s: lookups: %s" % [extract_name, lookups.inspect]
+    logger.debug "%s: lookups: %s" % [extract_name, lookups]
     
     dsts = Array(KVS).new
     html_house.load.each_with_index do |src, i|
@@ -23,14 +38,7 @@ Cmds.command "extract" do
         hash = Hash(String, String).new
         lookups.each do |key, lookup|
           begin
-            case lookup
-            when Crawl::Lookup::CSS
-              hash[key] = myhtml.css(lookup.path).first?.try(&.inner_text).to_s
-            when Crawl::Lookup::REGEX
-              hash[key] = html.must.match(lookup.regex, "$1")
-            else
-              raise Crawl::Error.new("BUG: #{lookup.class} is not implemented yet")
-            end
+            hash[key] = apply_lookup(lookup, myhtml, html)
           rescue err : Must::MatchError
             if config.verbose?
               hint = "while extracting [#{extract_name}##{item_no}] key=#{key},#{lookup}\n#{html}"
@@ -52,6 +60,26 @@ Cmds.command "extract" do
   rescue err
     logger.error "%s: %s" % [extract_name, err.inspect_with_backtrace]
     raise err
+  end
+
+  protected def do_test(path : Path, lookup : Crawl::Lookup)
+    html   = File.read(path)
+    myhtml = Myhtml::Parser.new(html)
+    value  = apply_lookup(lookup, myhtml, html)
+
+    puts "lookup: #{lookup.to_s.inspect}"
+    puts "value : #{value.inspect}"
+  end
+
+  private def apply_lookup(lookup, myhtml, html) : String
+    case lookup
+    when Crawl::Lookup::CSS
+      myhtml.css(lookup.path).first?.try(&.inner_text).to_s
+    when Crawl::Lookup::REGEX
+      html.must.match(lookup.regex, "$1")
+    else
+      raise Crawl::Error.new("BUG: #{lookup.class} is not implemented yet")
+    end
   end
 
   private def extract_mapping(name : String) : Hash(String, String)

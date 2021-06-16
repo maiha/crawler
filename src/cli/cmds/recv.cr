@@ -1,4 +1,8 @@
 Cmds.command "recv" do
+  usage "run               # fetch htmls"
+  usage "clean             # delete fetched htmls"
+  usage "clean             # delete fetched htmls"
+
   var logger : Logger = config.build_logger(path: nil)
 
   var visited_urls  = Set(String).new
@@ -22,16 +26,12 @@ Cmds.command "recv" do
     @next_lookup = Crawl::Lookup.parse?(config.crawl_next)
   end
   
-  task "run" do
-    invoke_task "html"
-  end
-  
-  task "reset" do
+  task "clean" do
     http_house.clean    
     html_house.clean    
   end
   
-  task "html" do
+  task "run" do
     self.current_url = startup_url?
 
     while url = current_url?
