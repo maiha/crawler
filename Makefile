@@ -21,6 +21,7 @@ build:
 
 .PHONY: crawler-dev
 crawler-dev: BUILD_TARGET=crawler-dev
+crawler: COMPILE_FLAGS=--static
 crawler-dev: build
 
 .PHONY: crawler

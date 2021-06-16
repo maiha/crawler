@@ -2,6 +2,9 @@
 class Crawl::Error < Exception
 end
 
+class Crawl::ReachedMaxPage < Crawl::Error
+end
+
 class Crawl::Dryrun < Crawl::Error
 end
 

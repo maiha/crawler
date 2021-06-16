@@ -13,6 +13,8 @@ Cmds.command "extract" do
     lookups = build_lookups(extract_name, hint: "[extract.#{extract_name}]")
     house   = kvs_house(extract_name)
 
+    logger.debug "%s: lookups: %s" % [extract_name, lookups.inspect]
+    
     dsts = Array(KVS).new
     html_house.load.each_with_index do |src, i|
       item_no = i+1
@@ -37,15 +39,22 @@ Cmds.command "extract" do
               raise err
             end
           end
+
+          hash.delete(key) if hash[key]?.to_s.empty?
         end
         dsts << KVS.new(key: src.key, val: hash.to_json, at: src.at)
+        logger.debug "%s: %s" % [item_no, dsts.last.val]
       end
     end
     house.write(dsts)
     logger.info "%s: %d records" % [extract_name, house.count]
+
+  rescue err
+    logger.error "%s: %s" % [extract_name, err.inspect_with_backtrace]
+    raise err
   end
 
-  private def extract_mapping(name : String)
+  private def extract_mapping(name : String) : Hash(String, String)
     config.extract?(name) || raise Crawl::Config::Error.new("no 'extract.#{name}' field in config")
   end
   

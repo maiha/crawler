@@ -49,7 +49,7 @@ Cmds.command "recv" do
 
   protected def ensure_page_max!
     if page_cnt >= page_max
-      raise Crawl::Error.new("Reached the page_max(#{page_max})")
+      raise Crawl::ReachedMaxPage.new("Reached the page_max: #{page_max}")
     end
   end
   

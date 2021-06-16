@@ -7,6 +7,7 @@ class Crawl::Config < TOML::Config
 
   # base
   bool "verbose"
+  bool "debug"
   bool "dryrun"
   bool "colorize"
   i32  "limit"
@@ -84,7 +85,7 @@ class Crawl::Config < TOML::Config
       hint = hash["name"]?.try{|s| "[#{s}]"} || ""
       hash["path"] ||= _path || raise Error.new("logger.path is missing")
       logger = Pretty::Logger.build_logger(hash)
-      logger.formatter = "{{mark}},[{{time=%H:%M}}] #{hint}{{message}}"
+      logger.formatter = hash["format"]?.to_s.presence || "{{mark}},[{{time}}] #{hint}{{message}}"
       return logger
     else
       raise Error.new("logger type error (#{hash.class})")
@@ -154,12 +155,12 @@ logging         = true
 [[logger]]
 path     = "STDOUT"
 level    = "INFO"
-format   = "{{mark}},[{{time=%H:%M:%S}}] {{message}}"
+format   = "{{mark}},[{{time}}] {{message}}"
 colorize = true
 
 [[logger]]
 path     = "crawl.log"
 mode     = "w+"
 level    = "DEBUG"
-format   = "{{mark}},[{{time=%Y-%m-%d %H:%M:%S}}] {{message}}"
+format   = "{{mark}},[{{time}}] {{message}}"
 EOF

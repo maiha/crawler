@@ -27,6 +27,7 @@ class Cli::Main
   option format  : String?, "-F <format>", "Specify format", nil
   option force   : Bool  , "--force", "Force option", false
   option dryrun  : Bool  , "-n", "Dryrun mode", false
+  option debug   : Bool  , "-d", "Set logger level to DEBUG", false
   option verbose : Bool  , "-v", "Verbose output", false
   option nocolor : Bool  , "--no-color", "Disable colored output", false
   option version : Bool  , "--version", "Print the version and exit", false
@@ -39,6 +40,7 @@ class Cli::Main
     # setup
     self.config = load_config
     config.verbose  = verbose
+    config.debug    = debug
     config.dryrun   = dryrun
     config.colorize = !nocolor
     config.force    = force
@@ -115,6 +117,8 @@ class Cli::Main
     when Crawl::Dryrun
       STDERR.puts err.inspect
       exit 10
+    when Crawl::ReachedMaxPage
+      cmd.logger.info err.to_s
     when Crawl::Denied, Crawl::Error
       STDERR.puts red(err.to_s)
       exit 20
