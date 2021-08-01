@@ -11,8 +11,8 @@ all: crawler-dev
 export UID = $(shell id -u)
 export GID = $(shell id -g)
 
-COMPILE_FLAGS=
-LINK_FLAGS=--link-flags "-static -lcurl -lnghttp2 -lidn2 -lssl -lcrypto -lz"
+COMPILE_FLAGS=-p -t
+LINK_FLAGS=--link-flags "-static -lcurl -lnghttp2 -lidn2 -lbrotlidec-static -lbrotlicommon-static -lssl -lcrypto -lz"
 BUILD_TARGET=
 
 .PHONY: build
@@ -32,6 +32,12 @@ crawler: build
 .PHONY: console
 console:
 	@docker-compose run --rm alpine sh
+
+rebuild-docker-image:
+	docker-compose build --no-cache --parallel
+
+clean:
+	rm -rf lib .crystal .shards
 
 ######################################################################
 ### testing
