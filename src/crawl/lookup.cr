@@ -21,6 +21,12 @@ abstract class Crawl::Lookup
     end
   end
 
+  class STRIP < Lookup
+    def to_s(io : IO)
+      io << "strip:"
+    end
+  end
+
   def self.parse?(buf : Array(String)?) : Array(Lookup)?
     if buf
       buf.map{|b| parse(b)}
@@ -43,6 +49,8 @@ abstract class Crawl::Lookup
       CSS.new($1.strip)
     when /^regex:(.*)/
       REGEX.new(/#{$1.strip}/)
+    when /^strip:$/
+      STRIP.new
     else
       raise Crawl::Config::Error.new("invalid pattern '%s' (possible: css, regex)" % buf)
     end    

@@ -31,6 +31,7 @@ $ vi .crawlrc
 ```toml
 [extract.json]
 title = "css:div.r h3"
+name  = ["css:p.name", "strip:"]
 
 [crawl]
 url      = "https://www.google.com/search?q=crystal"

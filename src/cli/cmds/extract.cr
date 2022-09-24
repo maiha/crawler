@@ -84,6 +84,8 @@ Cmds.command "extract" do
       myhtml.css(lookup.path).first?.try(&.inner_text).to_s
     when Crawl::Lookup::REGEX
       html.must.match(lookup.regex, "$1")
+    when Crawl::Lookup::STRIP
+      html.strip
     else
       raise Crawl::Error.new("BUG: #{lookup.class} is not implemented yet")
     end
