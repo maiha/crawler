@@ -53,8 +53,20 @@ class Crawl::Config < TOML::Config
     toml[field]?.as?(TOML::Table) || raise Error.new("invalid config: [#{field}] not found")
   end
 
-  def extract?(name : String) : Hash(String, String)?
-    table("extract")[name]?.try(&.must.cast(Hash(String, String)))
+  def extract?(name : String) : Hash(String, Array(String))?
+    hash = Hash(String, Array(String)).new
+    table("extract")[name]?.try{|h|
+      h.as(Hash).each do |k,v|
+        case v
+        when Array
+          v = v.must.cast(Array(String))
+        else
+          v = [v.must.cast(String)]
+        end
+        hash[k] = v
+      end
+    }
+    return hash
     # Underlying type from Union Types fails in Crystal.
     # table("extract")[name]?.try(&.as(Hash(String, String)))
   end

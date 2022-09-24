@@ -21,16 +21,30 @@ abstract class Crawl::Lookup
     end
   end
 
+  def self.parse?(buf : Array(String)?) : Array(Lookup)?
+    if buf
+      buf.map{|b| parse(b)}
+    else
+      nil
+    end
+  end
+
   def self.parse?(buf : String?) : Lookup?
+    if buf
+      parse(buf)
+    else
+      nil
+    end
+  end
+  
+  def self.parse(buf : String) : Lookup
     case buf
     when /^css:(.*)/
       CSS.new($1.strip)
     when /^regex:(.*)/
       REGEX.new(/#{$1.strip}/)
-    when String
-      raise Crawl::Config::Error.new("invalid pattern '%s' (possible: css, regex)" % buf)
     else
-      nil
+      raise Crawl::Config::Error.new("invalid pattern '%s' (possible: css, regex)" % buf)
     end    
   end
 end

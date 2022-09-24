@@ -71,7 +71,14 @@ Cmds.command "extract" do
     puts "value : #{value.inspect}"
   end
 
-  private def apply_lookup(lookup, myhtml, html) : String
+  private def apply_lookup(lookups : Array(Crawl::Lookup), myhtml, html) : String
+    lookups.each do |lookup|
+      html = apply_lookup(lookup, myhtml, html)
+    end
+    return html
+  end
+  
+  private def apply_lookup(lookup : Crawl::Lookup, myhtml, html) : String
     case lookup
     when Crawl::Lookup::CSS
       myhtml.css(lookup.path).first?.try(&.inner_text).to_s
@@ -82,12 +89,12 @@ Cmds.command "extract" do
     end
   end
 
-  private def extract_mapping(name : String) : Hash(String, String)
+  private def extract_mapping(name : String) : Hash(String, Array(String))
     config.extract?(name) || raise Crawl::Config::Error.new("no 'extract.#{name}' field in config")
   end
   
   private def build_lookups(name : String, hint : String)
-    lookups = Hash(String, Crawl::Lookup).new
+    lookups = Hash(String, Array(Crawl::Lookup)).new
 
     extract_mapping(name).each do |key, val|
       lookups[key] = Crawl::Lookup.parse?(val) || raise Crawl::Config::Error.new("invalid pattern '%s' in '%s %s'" % [val, hint, key])
